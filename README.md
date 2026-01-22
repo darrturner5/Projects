@@ -9,13 +9,18 @@ The goal of the Laser Tracking Rail System is to use a camera to follow a red la
 
 ## Key Concepts:
 -Proportional Feedback Control
+
 -Serial Communication
+
 -Mechanical structure
 
 ## Results:
 -Motor and Servo respond correctly to laser position
+
 -Servo makes some sharp overcorrections causing oscillation (resolved with Lower correction Gain)
+
 -Step motor moves very slowly 
+
 -Loud noises of step motor when moving (suggests some misalignment on rail)
 
 ## What I'd Improve:
