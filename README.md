@@ -49,6 +49,9 @@ Output = Gain x Error
 
 ## Demo:
 
+[![Laser Tracking Demo]https://www.youtube.com/shorts/D7JbAVAcNDQ
+
+
 
 
 
