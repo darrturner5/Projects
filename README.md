@@ -4,6 +4,7 @@ The goal of the Laser Tracking Rail System is to use a camera to follow a red la
 
 ## System Architecture:
 -Hardware: Arduino UNO R4 Wifi, SG90 Servo, NEMA 17 55Ncm STEP MOTOR, 500mm T8 KFL08 Trapezoidal Lead Screw, 500mm, MGN12H Linear Rail Guide, TMC2209, LC Circuit protection
+
 -Software: Python, Arduino, OpenCV, PySerial 
 
 ## Key Concepts:
