@@ -33,6 +33,8 @@ The goal of the Laser Tracking Rail System is to use a camera to follow a red la
 ![IMG_7990](https://github.com/user-attachments/assets/7defe666-5eae-448b-986d-d7c53ec99bf1)
 <img width="287" height="141" alt="image" src="https://github.com/user-attachments/assets/30ecec48-8681-4990-8616-8878287bf713" />
 
+Output = Gain x Error
+
 
 ## Prototype:
 
