@@ -1,0 +1,84 @@
+Arduino Code
+
+#include <Servo.h> 
+
+// Servo (Y-axis tilt)
+Servo tiltServo;
+const int SERVO_PIN = 5;
+const int SERVO_MIN = 10;     // Servo Limits
+const int SERVO_MAX = 170;
+
+// Stepper (X-axis linear rail)
+const int STEP_PIN = 3;
+const int DIR_PIN  = 4;
+
+// Stepper Motor position
+long currentStepperPos = 0;   // current motor position
+long targetStepperPos = 0;    // desired position
+unsigned long lastStepTime = 0;
+const unsigned long STEP_DELAY_US = 10; // pulse spacing
+
+// Timing for serial commands
+unsigned long lastCommandTime = 0;
+const unsigned long COMMAND_INTERVAL_MS = 20; // 50 Hz max
+
+void setup() {
+  Serial.begin(115200);
+  tiltServo.attach(SERVO_PIN);
+  tiltServo.write(90);  // neutral start
+
+  pinMode(STEP_PIN, OUTPUT);
+  pinMode(DIR_PIN, OUTPUT);
+}
+
+void loop() {
+  // Serial handling 
+  if (Serial.available()) {
+    if (millis() - lastCommandTime < COMMAND_INTERVAL_MS) {
+      return;
+    }
+    lastCommandTime = millis();
+
+    String data = Serial.readStringUntil('\n');
+    parseAndExecute(data);
+  }
+
+  // stepper control 
+  unsigned long now = micros();
+  if (currentStepperPos < targetStepperPos && now - lastStepTime >= STEP_DELAY_US) {
+    digitalWrite(DIR_PIN, HIGH);  // forward
+    digitalWrite(STEP_PIN, HIGH);
+    delayMicroseconds(1);          // tiny pulse
+    digitalWrite(STEP_PIN, LOW);
+    currentStepperPos++;
+    lastStepTime = now;
+  } 
+  else if (currentStepperPos > targetStepperPos && now - lastStepTime >= STEP_DELAY_US) {
+    digitalWrite(DIR_PIN, LOW);   // reverse
+    digitalWrite(STEP_PIN, HIGH);
+    delayMicroseconds(1);
+    digitalWrite(STEP_PIN, LOW);
+    currentStepperPos--;
+    lastStepTime = now;
+  }
+}
+
+// Command Parsing (Information from Serial Communication )
+void parseAndExecute(String data) {
+  int commaIndex = data.indexOf(',');
+  if (commaIndex == -1) return;
+
+  int servoAngle = data.substring(0, commaIndex).toInt();
+  int stepperDelta = data.substring(commaIndex + 1).toInt();
+
+  moveServo(servoAngle);
+
+  
+  targetStepperPos += stepperDelta;
+}
+
+// Servo Control
+void moveServo(int angle) {
+  angle = constrain(angle, SERVO_MIN, SERVO_MAX);
+  tiltServo.write(angle);
+}
