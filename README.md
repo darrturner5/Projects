@@ -29,12 +29,12 @@ The goal of the Laser Tracking Rail System is to use a camera to follow a red la
 
 
 
-## System Diagram + Control Math
+## System Diagram + Control Math:
 ![IMG_7990](https://github.com/user-attachments/assets/7defe666-5eae-448b-986d-d7c53ec99bf1)
 <img width="287" height="141" alt="image" src="https://github.com/user-attachments/assets/30ecec48-8681-4990-8616-8878287bf713" />
-The output is proportional to the error (input) 
 
-## Prototype
+
+## Prototype:
 
 ![IMG_7840](https://github.com/user-attachments/assets/c6cb69c4-9904-4714-9796-178bc69b348e)
 ![IMG_7998](https://github.com/user-attachments/assets/4374c666-4e2f-4590-9a2e-a9bbc566ce0a)
@@ -43,5 +43,11 @@ The output is proportional to the error (input)
 ![IMG_7991](https://github.com/user-attachments/assets/5cbe9089-db1b-4d3b-878e-a94ac1591af7)
 ![IMG_8005](https://github.com/user-attachments/assets/0b17aecd-b6a5-459f-a251-85105f97cb33)
 ![IMG_8002](https://github.com/user-attachments/assets/aaf20f24-cfd1-4960-8792-a8b55186e2d6)
+
+
+## Demo:
+https://github.com/user-attachments/assets/27a80de5-6984-4226-86af-abcbcb3bcd4a
+
+
 
 
