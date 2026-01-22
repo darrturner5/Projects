@@ -48,7 +48,7 @@ Output = Gain x Error
 
 
 ## Demo:
-https://github.com/user-attachments/assets/27a80de5-6984-4226-86af-abcbcb3bcd4a
+
 
 
 
