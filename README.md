@@ -26,7 +26,12 @@ The goal of the Laser Tracking Rail System is to use a camera to follow a red la
 ## What I'd Improve:
 - Replace Step Motor with an Electric motor and H-Bridge Control board. (Offers Higher speed)
 - Make the Linear Rail Guide longer than lead screw
+
+
+
+## System Diagram
   
 
 
+![IMG_7990](https://github.com/user-attachments/assets/7defe666-5eae-448b-986d-d7c53ec99bf1)
 
