@@ -1,0 +1,100 @@
+## Python code
+
+import cv2
+import numpy as np
+import serial
+import time
+
+#servo limits
+servo_min = 0
+servo_max = 180
+
+#Stepper limits
+stepper_max = 1000
+
+frameWidth = 1280
+frameHeight = 720
+cap = cv2.VideoCapture(0)
+cap.set(3,1280)
+cap.set(4,720)
+cap.set(cv2.CAP_PROP_EXPOSURE,-5)
+
+arduino = serial.Serial("/dev/cu.usbmodemF0F5BD4F47D02",115200)
+time.sleep(1)
+print("Ready!")
+
+
+while True:
+    success, img = cap.read()
+    if not success:
+        break
+
+    hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    blur = cv2.GaussianBlur(hsv, (5,5), 0)
+    #red ranges MASKING / Separate from the original camera feed
+                         #Hue,Sat,Value
+    lower_red = np.array([0,150,150])
+    upper_red = np.array([10,255,255])
+
+    lower_red2 = np.array([160,160,160])
+    upper_red2 = np.array([180,255,255])
+
+    mask1 = cv2.inRange(hsv,lower_red,upper_red)
+    mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
+
+    mask = cv2.bitwise_or(mask1, mask2)
+    # Mask Filtering
+    mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, np.ones((3, 3), np.uint8)) # smooths out filter
+
+    #Laser only
+    laser = cv2.bitwise_and(img,img, mask=mask) # Takes the laser and how it looks like in the original image
+
+    #CONTOURS + Bounding Box
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    if contours:
+        largest = max(contours, key=cv2.contourArea)
+
+        x,y,w,h = cv2.boundingRect(largest)
+        cv2.rectangle(img, (x,y),(x+w,y+h), (0,165,255),5)
+
+        min_area = 5  # adjust based on laser dot size
+        contours = [c for c in contours if cv2.contourArea(c) > min_area]
+
+        #Centroid: Center of Laser Bounding Box
+        m = cv2.moments(largest)
+        cx = int(m["m10"]/m["m00"])
+        cy = int(m["m01"]/m["m00"])
+
+        # Error Calculation
+        xerror = cx - frameWidth // 2
+        yerror = cy - frameHeight // 2
+
+        #Proportional Mapping (Measuring the Error and the output is our correction)
+        error = yerror / (frameHeight/2)
+        correction = error * 45
+
+        servo_angle =  int(90 - correction)
+        stepper_pos =  int(xerror * 0.05)
+
+        stepper_pos = max(-20, min(20, stepper_pos))
+
+        #Print what im sending
+        print(servo_angle, stepper_pos)
+        #print("cx, cy", cx, cy)
+
+        # Serial Communication
+        arduino.write(f"{servo_angle},{stepper_pos}\n".encode())
+
+
+
+
+
+
+
+
+
+
+
+    cv2.imshow("original",img)
+    if cv2.waitKey(1) & 0xFF ==ord('q'):
+        break
